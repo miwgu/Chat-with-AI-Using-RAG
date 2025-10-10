@@ -1,0 +1,13 @@
+DROP DATABASE IF EXISTS ai_chat_db2025;
+CREATE DATABASE ai_chat_db2025;
+USE ai_chat_db2025;
+
+CREATE TABLE chat_logs (
+  id CHAR(36) PRIMARY KEY DEFAULT (UUID()),  
+  question TEXT NOT NULL,
+  response TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+
