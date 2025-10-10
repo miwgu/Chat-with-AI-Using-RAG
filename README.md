@@ -48,29 +48,6 @@ npm install
 #VITE_BACKEND_URL=http://localhost:3000
 #Docker
 VITE_BACKEND_URL=http://localhost:3001
-``` 
-
-
-## 🐳Docker Container Setup for `aida-frontend`
-
-1. Create Custom Docker Network (only need once)
-```bash
-sudo docker network create --subnet=172.25.0.0/24 aida-net
-docker network ls
-docker inspect fwk-net
-```
-2. Build the Frontend Image
-```bash
-docker build -t aida-frontend .
-```
-3. Run the Container
-```bash
-docker stop aida-front
-docker rm aida-front
-docker run --name aida-front --network aida-net -p 4173:4173 -d aida-frontend
-```
-4. Access the App
-http://localhost:4173/
 
 ---
 
@@ -137,44 +114,37 @@ If using a different model, update the model name in ollama.ts.
 #DB_PORT=3306             
 
 
-PORT=3001
+PORT=3000
 FRONTEND_ORIGIN=http://localhost:4173
 OLLAMA_URL=http://host.docker.internal:11434
+OLLAMA_MODEL=mistral
+VITE_BACKEND_URL=http://localhost:3000
 
 # Database Docker
-DB_HOST=mysql
+DB_HOST=postgres
+DB_PORT=5432
 DB_USER=myuser
 DB_PASSWORD=mypassword
 DB_NAME=chatdb
-DB_PORT=3306
+
 ```
 
 ---
 
-## 🐳Docker Container Setup for `aida-backend`
+## 🐳Docker Container Setup 
 
-1. Create Custom Docker Network (for frontend ↔ backend)
-```bash
-sudo docker network create --subnet=172.25.0.0/24 aida-net
-docker network ls
-docker inspect fwk-net
-```
-2. Pull MySQL Image
-```bash
-docker pull mysql:8.0
-```
-3. Start Containers
+1. Start Containers
 ```bash
 docker-compose up -d --build
 ```
-4. Stop and Remove Containers
+2. Stop and Remove Containers
 ```bash
 docker-compose down
 ```
 ---
 
 ## 💾 Database Setup
-Login to MySQL container: input password 
+Login to Postgres container: input password 
 ```bash
 docker exec -it aida-mysql-container mysql -u myuser -p
 ```
@@ -212,6 +182,7 @@ docker logs aida-backend
 ---
 
 ## 🧪Run Locally Without Docker
+I use Mysql for local database
 1.use sql file for create Database
 2.Start the backend server:
 ```bash
