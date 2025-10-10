@@ -1,4 +1,4 @@
-# AI_Developer_Assistant_Backend & Frontend – Fullstack LLM Chatbot
+# AI_Chat_Backend & Frontend – Fullstack LLM Chatbot
 
 ## 📚 Overview
 
