@@ -16,7 +16,8 @@
     "express": "^4.21.2",
     "langchain": "^0.0.197",
     "mysql2": "^3.14.1",
-    "pg": "^8.16.0"
+    "pg": "^8.16.0",
+    "pgvector": "^0.2.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.18",
