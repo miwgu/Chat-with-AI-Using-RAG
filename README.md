@@ -1,10 +1,9 @@
-# AI_Chat_Backend & Frontend – Fullstack LLM Chatbot
+# AI_Chat_– Fullstack LLM Chatbot
 
 ## 📚 Overview
 
-**AI Dev Assistant** is a full-stack web application that allows users to interact with a Large Language Model (LLM) through a minimal, like ChatGPT-style interface. Built with React, Express, and LangChain, this app integrates to LLM model mistral from Ollama, answer natural language queries. All interactions are stored in a MySQL database for logging purposes.
+This is a full-stack web application that allows users to interact with a Large Language Model (LLM) through a minimal. Built with React, Express, and LangChain, this app integrates to LLM model mistral from Ollama, answer natural language queries. All interactions are stored in a MySQL database for logging purposes.
 
-> This project is part of a fullstack take-home assessment. It demonstrates LLM integration, clean API design, full-stack architecture, and optional Docker + DB implementation.
 
 ---
 ## ✅ Features
@@ -15,14 +14,16 @@
 - Works seamlessly with backend via /api/query and /api/getchatlog
 
 - LLM powered by Mistral via Ollama
+> Ollama is a lightweight framework that lets you run large language models (LLMs) locally on your own computer — without relying on cloud APIs like OpenAI’s.
 
 ---
 ## 🚀 Tech Stack
 
-- **Frontend:** React (TypeScript + Vite) [Frontend](https://github.com/miwgu/AI_Developer_Assistant_Frontend)
+- **Frontend:** React (TypeScript + Vite) — [Frontend Repo](https://github.com/miwgu/AI_Developer_Assistant_Frontend)
 - **Backend:** Express.js (TypeScript)
-- **LLM Integration:** LangChain + Mistral (via Ollama) [Ollama](https://ollama.com/)
-- **Database:** MySQL (with UUID primary keys)
+- **LLM Integration:** LangChain + Mistral (via [Ollama](https://ollama.com/))
+- **RAG:** Generate and store embeddings with `nomic-embed-text`, retrieve relevant documents using pgvector, and build context prompts for the LLM
+- **Database:** PostgreSQL (pgvector)
 - **Containerization:** Docker, Docker Compose
 
 ---
@@ -143,60 +144,42 @@ docker-compose down
 ```
 ---
 
-## 💾 Database Setup
-Login to Postgres container: input password 
-```bash
-docker exec -it aida-mysql-container mysql -u myuser -p
-```
-Then run:
-```bash
-drop database if exists chatdb;
-create database chatdb;
+## 💾 Database Setup with init.sql
+You don’t need to do anything manually to set up the database `chatdb`.  
+It is automatically created by `docker-compose.yml`.
 
-USE chatdb;
+The `postgres_data` volume is **persistent**, which means that even if you delete the container, the volume (and thus the database data) will remain. This is why the database may continue to operate with old data.
 
-
-CREATE TABLE chat_logs (
-  id CHAR(36) PRIMARY KEY DEFAULT (UUID()),  
-  question TEXT NOT NULL,
-  response TEXT NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
-
-To check saved chat
-```bash
-USE chatdb;
-select * from chat_logs;
-```
-
-Exit from MySQL
-```bash
-exit;
-```
-
-Displays the logs
-```bash
-docker logs aida-backend
-```
+```yaml
+environment:
+  - POSTGRES_DB=${DB_NAME}
+  - POSTGRES_USER=${DB_USER}
+  - POSTGRES_PASSWORD=${DB_PASSWORD}
+volumes:
+  - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 ---
 
-## 🧪Run Locally Without Docker
-I use Mysql for local database
-1.use sql file for create Database
-2.Start the backend server:
+##🔄 Resetting the Database
+
+If you want to completely delete chatdb and create a new one:
 ```bash
-npx ts-node src/server/index.ts
+docker compose down -v && docker compose up -d
 ```
+This will remove both the container and the persistent volume, so the database is recreated from scratch.
+---
 
-OR
-
+##📝 Accessing the Database
+Login to the Postgres container (you will need to enter the password):
 ```bash
-chmod +x ./node_modules/.bin/ts-node
-./node_modules/.bin/ts-node src/server/index.ts
-
+docker exec -it aida-postgres-container psql -U myuser -d chatdb
+```
+Check existing tables:
+```bash
+\dt  
 ```
 ---
+---
+
 
 ## 📈 API Endpoints
 
@@ -209,9 +192,6 @@ chmod +x ./node_modules/.bin/ts-node
 
 ## 📝 Future Improvements 
 
-- Change to OpenAI　gpt-4.1-nano
-- Change to PostgresSQL(pgvector)
-- use RAG(Retrieval Augmented Generation)
 - Add user authentication (JWT)
 - Delete history entries by ID
 - Create and group chat sessions by topic
