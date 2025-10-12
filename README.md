@@ -49,6 +49,7 @@ npm install
 #VITE_BACKEND_URL=http://localhost:3000
 #Docker
 VITE_BACKEND_URL=http://localhost:3001
+```
 
 ---
 
@@ -71,14 +72,15 @@ VITE_BACKEND_URL=http://localhost:3001
 
 - Logs are ordered from oldest (top) to newest (bottom) in the UI.
 
+
 ---
 
 ## ⚙️ Backend Setup Instructions
    
 1. Install Ollama
 
-   - For Windows (WSL2 + Ubuntu)  
-   - For Mac (Intel/Apple Silicon)
+- For Windows (WSL2 + Ubuntu)  
+- For Mac (Intel/Apple Silicon)
 
 ```bash
 curl -fsSL https://ollama.com/install.sh | sh
