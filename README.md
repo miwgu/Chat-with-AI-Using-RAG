@@ -157,9 +157,10 @@ environment:
   - POSTGRES_PASSWORD=${DB_PASSWORD}
 volumes:
   - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+```
 ---
 
-##🔄 Resetting the Database
+##　🔄 Resetting the Database
 
 If you want to completely delete chatdb and create a new one:
 ```bash
@@ -168,7 +169,7 @@ docker compose down -v && docker compose up -d
 This will remove both the container and the persistent volume, so the database is recreated from scratch.
 ---
 
-##📝 Accessing the Database
+##　📝 Accessing the Database
 Login to the Postgres container (you will need to enter the password):
 ```bash
 docker exec -it aida-postgres-container psql -U myuser -d chatdb
@@ -177,9 +178,9 @@ Check existing tables:
 ```bash
 \dt  
 ```
----
----
 
+
+---
 
 ## 📈 API Endpoints
 
