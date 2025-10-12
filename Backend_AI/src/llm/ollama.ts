@@ -9,8 +9,17 @@ private model = new Ollama({
 
   async *stream(prompt: string): AsyncGenerator<string> {
   const stream = await this.model.stream(prompt);
+
   for await (const chunk of stream) {
-    yield chunk;
+    if (typeof chunk === "string"){
+      yield chunk;
+    } else if (typeof chunk === "object" && "content" in chunk){ // example string "hello" or object { content: "Hello", done: false }
+      yield (chunk as any).content;
+    }
   }
 }
+  async invoke(prompt: string): Promise<string> {
+    return await this.model.invoke(prompt);
+  }
+
 }
