@@ -28,13 +28,13 @@ This is a full-stack web application that allows users to interact with a Large 
 
 ---
 
-## ⚙️ Frontend Setup Instructions
+## ⚙️ Project Setup Instructions
 
-1. Clone the Backend Repository
+1. Clone the Repository
 ```bash
-git clone https://github.com/miwgu/AI_Developer_Assistant_Frontend.git
+git clone https://github.com/miwgu/Chat-with-AI-Using-RAG.git
 ```
-2. Install Dependencies
+2. Install Dependencies both frontend and backend
 ```bash
 npm install
 ``` 
@@ -74,29 +74,24 @@ VITE_BACKEND_URL=http://localhost:3001
 ---
 
 ## ⚙️ Backend Setup Instructions
-
-1. Clone the Backend Repository
-```bash
-git clone https://github.com/miwgu/AI_Developer_Assistant_Backend.git
-```
-2. Install Dependencies
-```bash
-npm install
-```
    
-3. Install Ollama
+1. Install Ollama
 
-For Windows (WSL2 + Ubuntu)
-For Mac (Intel/Apple Silicon)
+   - For Windows (WSL2 + Ubuntu)  
+   - For Mac (Intel/Apple Silicon)
 
 ```bash
 curl -fsSL https://ollama.com/install.sh | sh
 ```
-4. Download LLM Model (e.g., Mistral)
+2. Download LLM Model (e.g., Mistral)
 ```bash
 ollama run mistral
 ```
-If using a different model, update the model name in ollama.ts.
+3. Download Embed Model (e.g., nomic-embed-text)
+```bash
+ollama run nomic-embed-text
+```
+4. Optional: If using a different model, update the model name in ollama.ts.
 
 ---
 
