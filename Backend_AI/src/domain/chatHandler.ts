@@ -2,8 +2,6 @@ import { saveChatLog } from '../db/chatRepository';
 import { OllamaLLM } from '../llm/ollama';
 import { searchKnowledge } from '../rag/searchKnowledge';
 
-//const ollama = new OllamaLLM();
-
 export async function handleChatQuery(message: string): Promise<AsyncGenerator<string>> {
   
   // RAG search
