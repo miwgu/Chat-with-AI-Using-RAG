@@ -13,7 +13,7 @@ import './src/db/db';
 const app = express();
 const port = process.env.PORT || 3000;
 
-const frontendOrigin = process.env.FRONTEND_ORIGIN || 'http://localhost:5173'
+const frontendOrigin = process.env.FRONTEND_ORIGIN
 
 app.use(cors({
   origin: frontendOrigin,
