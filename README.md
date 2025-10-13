@@ -48,26 +48,24 @@ By leveraging **Retrieval-Augmented Generation (RAG)**, it retrieves context fro
 
 
 ## 🧠 System Architecture Diagram
-
-
 ```mermaid
 flowchart LR
     subgraph User
-        A1[🧑 Type question in chat UI]
+        A1[Type question in chat UI]
     end
 
     subgraph Frontend
-        A2[💻 Frontend (React + Vite)]
-        A3[Render chat UI + history]
+        A2[Frontend React Vite]
+        A3[Render chat UI and history]
     end
 
     subgraph Backend
         B1[Receive query]
-        B2[Embed text via nomic-embed-text (Ollama)]
-        B3[Vector search in PostgreSQL (pgvector)]
+        B2[Embed text via nomic-embed-text Ollama]
+        B3[Vector search in PostgreSQL pgvector]
         B4[Retrieve relevant context]
-        B5[Generate response via Mistral (Ollama)]
-        B6[Store question + response in DB]
+        B5[Generate response via Mistral Ollama]
+        B6[Store question and response in DB]
     end
 
     subgraph Database
@@ -84,10 +82,10 @@ flowchart LR
     A1 --> A2
     A2 -->|POST /api/query| B1
     B1 -->|Embedding Request| O2
-    O2 -->|Embedding Vector| B3
-    B3 -->|Vector Search| D1
-    D1 -->|Relevant Context| B5
-    B5 -->|LLM Response| B6
+    O2 -->|Embedding Vector| B2
+    B2 -->|Vector Search| B3
+    B3 -->|Relevant Context| B5
+    B5 -->|Response| B6
     B6 --> D2
     B6 --> A3
     A3 --> A1
