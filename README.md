@@ -39,12 +39,63 @@ By leveraging **Retrieval-Augmented Generation (RAG)**, it retrieves context fro
 4. The generated response is returned to the frontend **and saved in the database** for chat history tracking.  
 5. A GET request to **`/api/getchatlog`** retrieves all previous chat logs for display in the UI.
 
-### ⚙️ Internal Features
+### Under the Hood
 - **RAG (Retrieval-Augmented Generation)** implemented with **LangChain**  
 - **LLM-powered responses** using **Mistral** via **Ollama** (runs locally, no external APIs required)  
 - **PostgreSQL + pgvector** for document embeddings and similarity search  
 - **Persistent chat history** with unique IDs and timestamps  
 - **Frontend rendering** displays messages chronologically (oldest → newest)
+
+
+## 🧠 System Architecture Diagram
+
+```mermaid
+flowchart LR
+    subgraph User[🧑 User]
+        A1[Type question in chat UI]
+    end
+
+    subgraph Frontend[💻 Frontend (React + Vite)]
+        A2[Send POST /api/query]
+        A3[Render chat UI + history]
+    end
+
+    subgraph Backend[⚙️ Backend (Express + LangChain)]
+        B1[Receive query]
+        B2[Embed text via nomic-embed-text (Ollama)]
+        B3[Vector search in PostgreSQL (pgvector)]
+        B4[Retrieve relevant context]
+        B5[Generate response via Mistral (Ollama)]
+        B6[Store question + response in DB]
+    end
+
+    subgraph Database[🗃️ PostgreSQL + pgvector]
+        D1[(Embeddings Table)]
+        D2[(Chat Logs Table)]
+    end
+
+    subgraph Ollama[🧩 Ollama (Local LLM Runtime)]
+        O1[(Mistral LLM)]
+        O2[(nomic-embed-text)]
+    end
+
+    %% Connections
+    User --> A1 --> Frontend
+    Frontend -->|POST /api/query| Backend
+    Backend -->|Embedding Request| Ollama
+    Ollama -->|Embedding Vector| Backend
+    Backend -->|Vector Search| Database
+    Database -->|Relevant Context| Backend
+    Backend -->|LLM Request| Ollama
+    Ollama -->|Generated Answer| Backend
+    Backend -->|Save Log| Database
+    Backend -->|Return Response| Frontend
+    Frontend -->|GET /api/getchatlog| Backend
+    Backend -->|Chat History| Frontend
+    Frontend -->|Display Conversation| User
+```
+
+
 ---
 
 ## ⚙️ Project Setup Instructions
