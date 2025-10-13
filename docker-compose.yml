@@ -16,22 +16,17 @@ services:
     networks:
       - aida-net-db
 
-  aida-frontend:
-    build:
-      context: ./Frontend_AI
-      dockerfile: Dockerfile
-      args:
-        VITE_BACKEND_URL:  ${VITE_BACKEND_URL}   # <-- Pass build arg here
-    container_name: aida-frontend
-    environment:
-      - VITE_BACKEND_URL=${VITE_BACKEND_URL}
-    ports:
-      - "4173:4173"
-    networks:
-      - aida-net-frontend
+  register-knowledge:
+    image: node:18
+    working_dir: /app
+    volumes:
+      - ./Backend_AI:/app
+    command: npx ts-node src/rag/registerKnowledge.ts
     depends_on:
-      - aida-backend
-
+      - postgres
+    networks:
+      - aida-net-db
+  
   aida-backend:
     build:
       context: ./Backend_AI
@@ -56,6 +51,23 @@ services:
         - "host.docker.internal:host-gateway"    
     depends_on:
       - postgres
+      - register-knowledge
+
+  aida-frontend:
+    build:
+      context: ./Frontend_AI
+      dockerfile: Dockerfile
+      args:
+        VITE_BACKEND_URL:  ${VITE_BACKEND_URL}   # <-- Pass build arg here
+    container_name: aida-frontend
+    environment:
+      - VITE_BACKEND_URL=${VITE_BACKEND_URL}
+    ports:
+      - "4173:4173"
+    networks:
+      - aida-net-frontend
+    depends_on:
+      - aida-backend
 
 networks:
   aida-net-db:
@@ -64,4 +76,5 @@ networks:
     driver: bridge
 
 volumes:
+
   postgres_data:
