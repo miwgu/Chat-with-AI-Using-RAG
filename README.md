@@ -74,25 +74,29 @@ VITE_BACKEND_URL=http://localhost:3001
 
 
 ---
+## 🧠 Ollama Setup (Required before running Docker)
 
-## ⚙️ Backend Setup Instructions
+Before starting the Docker containers, you need to install and set up **Ollama** on your local machine.  
+The backend container connects to Ollama running on your host machine via `http://host.docker.internal:11434`.
+
    
 1. Install Ollama
-
 - For Windows (WSL2 + Ubuntu)  
 - For Mac (Intel/Apple Silicon)
-
 ```bash
 curl -fsSL https://ollama.com/install.sh | sh
 ```
+
 2. Download LLM Model (e.g., Mistral)
 ```bash
 ollama run mistral
 ```
+
 3. Download Embed Model (e.g., nomic-embed-text)
 ```bash
 ollama run nomic-embed-text
 ```
+
 4. Optional: If using a different model, update the model name in ollama.ts.
 
 ---
