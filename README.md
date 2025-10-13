@@ -49,18 +49,19 @@ By leveraging **Retrieval-Augmented Generation (RAG)**, it retrieves context fro
 
 ## 🧠 System Architecture Diagram
 
+
 ```mermaid
 flowchart LR
-    subgraph User[🧑 User]
-        A1[Type question in chat UI]
+    subgraph User
+        A1[🧑 Type question in chat UI]
     end
 
-    subgraph Frontend[💻 Frontend (React + Vite)]
-        A2[Send POST /api/query]
+    subgraph Frontend
+        A2[💻 Frontend (React + Vite)]
         A3[Render chat UI + history]
     end
 
-    subgraph Backend[⚙️ Backend (Express + LangChain)]
+    subgraph Backend
         B1[Receive query]
         B2[Embed text via nomic-embed-text (Ollama)]
         B3[Vector search in PostgreSQL (pgvector)]
@@ -69,30 +70,27 @@ flowchart LR
         B6[Store question + response in DB]
     end
 
-    subgraph Database[🗃️ PostgreSQL + pgvector]
+    subgraph Database
         D1[(Embeddings Table)]
         D2[(Chat Logs Table)]
     end
 
-    subgraph Ollama[🧩 Ollama (Local LLM Runtime)]
+    subgraph Ollama
         O1[(Mistral LLM)]
         O2[(nomic-embed-text)]
     end
 
     %% Connections
-    User --> A1 --> Frontend
-    Frontend -->|POST /api/query| Backend
-    Backend -->|Embedding Request| Ollama
-    Ollama -->|Embedding Vector| Backend
-    Backend -->|Vector Search| Database
-    Database -->|Relevant Context| Backend
-    Backend -->|LLM Request| Ollama
-    Ollama -->|Generated Answer| Backend
-    Backend -->|Save Log| Database
-    Backend -->|Return Response| Frontend
-    Frontend -->|GET /api/getchatlog| Backend
-    Backend -->|Chat History| Frontend
-    Frontend -->|Display Conversation| User
+    A1 --> A2
+    A2 -->|POST /api/query| B1
+    B1 -->|Embedding Request| O2
+    O2 -->|Embedding Vector| B3
+    B3 -->|Vector Search| D1
+    D1 -->|Relevant Context| B5
+    B5 -->|LLM Response| B6
+    B6 --> D2
+    B6 --> A3
+    A3 --> A1
 ```
 
 
