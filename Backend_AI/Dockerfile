@@ -8,5 +8,5 @@ RUN npm install
 
 COPY . .
 
-# Run index.ts in root (not inside src)
-CMD ["npx", "ts-node", "index.ts"]
+# Register knowledge -> Start server
+CMD ["/bin/sh", "-c", "npx ts-node src/rag/registerKnowledge.ts && npx ts-node index.ts"]
