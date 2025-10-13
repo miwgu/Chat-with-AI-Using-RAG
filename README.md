@@ -180,10 +180,17 @@ ollama run nomic-embed-text
 ```bash
 docker-compose up -d --build
 ```
-2. Stop and Remove Containers
+2. Register Knowledge (Initial Setup)
+> This step is required only once when the database is empty or the persistent volume has been removed.
+```bash
+docker compose exec aida-backend npx ts-node src/rag/registerKnowledge.ts
+```
+3. Stop and Remove Containers (Optional)
 ```bash
 docker-compose down
 ```
+>⚠️ Note: The knowledge embeddings are stored in a persistent PostgreSQL volume.
+You do not need to re-run the registration script unless the database or volume is deleted.
 ---
 
 ## 💾 Database Setup with init.sql
