@@ -196,8 +196,8 @@ docker logs aida-backend
 ```bash
 docker compose down
 ```
->⚠️ Note: The knowledge embeddings are stored in a persistent PostgreSQL volume.
-You do not need to re-run the registration script unless the database or volume is deleted.
+>⚠️ Note: The knowledge embeddings are stored in the persistent PostgreSQL volume (postgres_data).
+You do not need to re-run the registration script or rebuild the containers unless the volume or database is deleted.
 ---
 
 ## 💾 Database Setup with init.sql
