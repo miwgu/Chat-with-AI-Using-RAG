@@ -184,10 +184,13 @@ ollama run nomic-embed-text
 ```bash
 docker compose up -d --build
 ```
-2. Register Knowledge (Initial Setup)
-> This step is required only once when the database is empty or the persistent volume has been removed.
+> This command automatically builds and starts all containers.
+You don’t need to manually create the database or register knowledge — these are handled automatically when the backend container starts.
+
+2. Check backed logs
+> Verify that the knowledge base is successfully registered and the server is running.
 ```bash
-docker compose exec aida-backend npx ts-node src/rag/registerKnowledge.ts
+docker logs aida-backend
 ```
 3. Stop and Remove Containers (Optional)
 ```bash
