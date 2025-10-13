@@ -50,29 +50,33 @@ By leveraging **Retrieval-Augmented Generation (RAG)**, it retrieves context fro
 ## 🧠 System Architecture Diagram
 ```mermaid
 flowchart LR
+    %% User
     subgraph User
         A1[Type question in chat UI]
     end
 
+    %% Frontend
     subgraph Frontend
         A2[Frontend React Vite]
         A3[Render chat UI and history]
     end
 
+    %% Backend
     subgraph Backend
         B1[Receive query]
-        B2[Embed text via nomic-embed-text Ollama]
-        B3[Vector search in PostgreSQL pgvector]
-        B4[Retrieve relevant context]
-        B5[Generate response via Mistral Ollama]
-        B6[Store question and response in DB]
+        B2[Embed query via nomic-embed-text Ollama]
+        B3[Vector search & retrieve relevant context from PostgreSQL pgvector]
+        B4[Generate response via Mistral Ollama]
+        B5[Store question and response in DB]
     end
 
+    %% Database
     subgraph Database
         D1[(Embeddings Table)]
         D2[(Chat Logs Table)]
     end
 
+    %% Ollama
     subgraph Ollama
         O1[(Mistral LLM)]
         O2[(nomic-embed-text)]
@@ -82,12 +86,12 @@ flowchart LR
     A1 --> A2
     A2 -->|POST /api/query| B1
     B1 -->|Embedding Request| O2
-    O2 -->|Embedding Vector| B2
-    B2 -->|Vector Search| B3
-    B3 -->|Relevant Context| B5
-    B5 -->|Response| B6
-    B6 --> D2
-    B6 --> A3
+    O2 --> B2
+    B2 --> B3
+    B3 -->|Context for response| B4
+    B4 -->|Response| B5
+    B5 --> D2
+    B5 --> A3
     A3 --> A1
 ```
 
@@ -178,7 +182,7 @@ ollama run nomic-embed-text
 
 1. Start Containers
 ```bash
-docker-compose up -d --build
+docker compose up -d --build
 ```
 2. Register Knowledge (Initial Setup)
 > This step is required only once when the database is empty or the persistent volume has been removed.
@@ -187,7 +191,7 @@ docker compose exec aida-backend npx ts-node src/rag/registerKnowledge.ts
 ```
 3. Stop and Remove Containers (Optional)
 ```bash
-docker-compose down
+docker compose down
 ```
 >⚠️ Note: The knowledge embeddings are stored in a persistent PostgreSQL volume.
 You do not need to re-run the registration script unless the database or volume is deleted.
