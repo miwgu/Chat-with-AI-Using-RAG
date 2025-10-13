@@ -19,13 +19,32 @@ By leveraging **Retrieval-Augmented Generation (RAG)**, it retrieves context fro
 ---
 ## 🚀 Tech Stack
 
-- **Frontend:** React (TypeScript + Vite) — [Frontend Repo](https://github.com/miwgu/AI_Developer_Assistant_Frontend)
+- **Frontend:** React (TypeScript + Vite) 
 - **Backend:** Express.js (TypeScript)
 - **LLM Integration:** LangChain + Mistral (via [Ollama](https://ollama.com/))
 - **RAG:** Generate and store embeddings with `nomic-embed-text`, retrieve relevant documents using pgvector, and build context prompts for the LLM
 - **Database:** PostgreSQL (pgvector)
 - **Containerization:** Docker, Docker Compose
 
+---
+
+## 💬 How It Works
+### User Interaction Flow
+1. The user types a question in the chat input on the frontend.  
+2. The frontend sends a POST request to **`/api/query`**.  
+3. The backend processes the request using **LangChain**:  
+   - The question is **embedded** using the embedding model (`nomic-embed-text` via Ollama).  
+   - A **vector similarity search** is performed in PostgreSQL (pgvector) to find the most relevant context.  
+   - The retrieved context is **combined** with the user’s query and sent to the **LLM (Mistral via Ollama)** for response generation.  
+4. The generated response is returned to the frontend **and saved in the database** for chat history tracking.  
+5. A GET request to **`/api/getchatlog`** retrieves all previous chat logs for display in the UI.
+
+### ⚙️ Internal Features
+- **RAG (Retrieval-Augmented Generation)** implemented with **LangChain**  
+- **LLM-powered responses** using **Mistral** via **Ollama** (runs locally, no external APIs required)  
+- **PostgreSQL + pgvector** for document embeddings and similarity search  
+- **Persistent chat history** with unique IDs and timestamps  
+- **Frontend rendering** displays messages chronologically (oldest → newest)
 ---
 
 ## ⚙️ Project Setup Instructions
@@ -77,28 +96,6 @@ DB_NAME=chatdb
 #Docker
 VITE_BACKEND_URL=http://localhost:3001
 ```
-
-
----
-
-## 💬 How It Works
-### User Interaction
-- User types a question in the chat input on the frontend.
-
-- Frontend sends a POST request to POST /api/query
-
-- Query is passed to LangChain and Mistral via Ollama.
-
-- The response is returned and saved to the database.
-
-- A GET request to GET /api/getchatlog retrieves all chat logs.
-
-### Features
-- LLM-powered responses (offline-capable using Ollama).
-
-- Chat messages are stored in MySQL with UUID-based primary keys.
-
-- Logs are ordered from oldest (top) to newest (bottom) in the UI.
 
 
 ---
