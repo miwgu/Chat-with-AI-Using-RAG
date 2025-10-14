@@ -51,25 +51,24 @@ By leveraging **Retrieval-Augmented Generation (RAG)**, it retrieves context fro
 
 ```mermaid
 flowchart LR
-
     %% User
     subgraph User
-        A1[User types question]
+        A1[Type question in chat UI]
     end
 
     %% Frontend
     subgraph Frontend
-        A2[React + Vite Chat UI]
-        A3[Display response and history]
+        A2[Frontend React Vite]
+        A3[Render chat UI and history]
     end
 
     %% Backend
     subgraph Backend
-        B1[Receive query (API)]
-        B2[Embed query via nomic-embed-text]
-        B3[Context retrieval from pgvector]
-        B4[Generate response via llama3 8b (Ollama)]
-        B5[Store chat logs in DB]
+        B1[Receive query]
+        B2[Embed query via nomic-embed-text Ollama]
+        B3[Vector search & retrieve relevant context from PostgreSQL pgvector]
+        B4[Generate response via Mistral Ollama]
+        B5[Store question and response in DB]
     end
 
     %% Database
@@ -78,33 +77,24 @@ flowchart LR
         D2[(Chat Logs Table)]
     end
 
-    %% Ollama Models
+    %% Ollama
     subgraph Ollama
-        O1[(llama3 8b)]
+        O1[(Mistral LLM)]
         O2[(nomic-embed-text)]
     end
 
-    %% Docker initialization
-    subgraph Docker_Init
-        X1[Run init.sql to setup tables]
-        X2[registerKnowledge.ts to embed and store knowledge]
-    end
-
-    %% Flow connections
+    %% Connections
     A1 --> A2
     A2 -->|POST /api/query| B1
     B1 -->|Embedding Request| O2
     O2 --> B2
     B2 --> B3
-    B3 -->|Relevant context| B4
+    B3 -->|Context for response| B4
     B4 -->|Response| B5
     B5 --> D2
     B5 --> A3
     A3 --> A1
 
-    %% Init connections
-    X1 --> D1
-    X2 --> D1
 
 ```
 
