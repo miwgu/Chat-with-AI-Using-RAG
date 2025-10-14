@@ -52,22 +52,22 @@ By leveraging **Retrieval-Augmented Generation (RAG)**, it retrieves context fro
 flowchart LR
     %% User
     subgraph User
-        A1[User<br>types question]
+        A1[User\ntypes question]
     end
 
     %% Frontend
     subgraph Frontend
-        A2[React + Vite<br>Chat UI]
-        A3[Display response<br>and history]
+        A2[React + Vite\nChat UI]
+        A3[Display response\nand history]
     end
 
     %% Backend
     subgraph Backend
         B1[Receive query (API)]
-        B2[Embed query<br>via nomic-embed-text]
-        B3[Context retrieval<br>from pgvector]
-        B4[Generate response<br>via llama3:8b (Ollama)]
-        B5[Store chat logs<br>in DB]
+        B2[Embed query\nvia nomic-embed-text]
+        B3[Context retrieval\nfrom pgvector]
+        B4[Generate response\nvia llama3:8b (Ollama)]
+        B5[Store chat logs\nin DB]
     end
 
     %% Database
@@ -84,8 +84,8 @@ flowchart LR
 
     %% Docker initialization
     subgraph Docker_Init
-        X1[Run init.sql<br>to setup tables]
-        X2[registerKnowledge.ts<br>to embed and store knowledge]
+        X1[Run init.sql\nto setup tables]
+        X2[registerKnowledge.ts\nto embed and store knowledge]
     end
 
     %% Flow connections
@@ -103,6 +103,7 @@ flowchart LR
     %% Init connections
     X1 --> D1
     X2 --> D1
+
 ```
 
 ---
