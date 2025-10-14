@@ -65,9 +65,9 @@ flowchart LR
     %% Backend
     subgraph Backend
         B1[Receive query]
-        B2[Embed query via nomic-embed-text Ollama]
+        B2[Embed query via nomic-embed-text]
         B3[Vector search & retrieve relevant context from PostgreSQL pgvector]
-        B4[Generate response via Mistral Ollama]
+        B4[Generate response via llama3:8b Ollama]
         B5[Store question and response in DB]
     end
 
@@ -79,7 +79,7 @@ flowchart LR
 
     %% Ollama
     subgraph Ollama
-        O1[(Mistral LLM)]
+        O1[(llama3:8b LLM)]
         O2[(nomic-embed-text)]
     end
 
