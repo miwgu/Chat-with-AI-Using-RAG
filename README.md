@@ -103,9 +103,7 @@ flowchart LR
     %% Init connections
     X1 --> D1
     X2 --> D1
-
 ```
-
 
 ---
 
