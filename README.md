@@ -83,18 +83,27 @@ flowchart LR
         O2[(nomic-embed-text)]
     end
 
+    %% Docker initialization
+    subgraph Docker_Init
+        X1[Run init.sql to setup tables]
+        X2[registerKnowledge.ts to embed and store knowledge]
+    end
+
     %% Connections
     A1 --> A2
     A2 -->|POST /api/query| B1
     B1 -->|Embedding Request| O2
     O2 --> B2
     B2 --> B3
-    B3 -->|Context for response| B4
+    B3 -->|Relevant context| B4
     B4 -->|Response| B5
     B5 --> D2
     B5 --> A3
     A3 --> A1
 
+    %% Init connections
+    X1 --> D1
+    X2 --> D1
 
 ```
 
