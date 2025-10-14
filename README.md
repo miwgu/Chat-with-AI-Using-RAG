@@ -1,4 +1,4 @@
-# Full-stack AI Chat System - Docker + Ollama + pgvector
+# Full-stack AI Chatbot with RAG - Docker + Ollama + pgvector
 
 ## 📚 Overview
 
@@ -264,8 +264,10 @@ Check existing tables:
 
 ## 📝 Future Improvements 
 
-- Add user authentication (JWT)
-- Delete history entries by ID
-- Create and group chat sessions by topic
-- Add search functionality in chat logs
+- Move knowledge from Array to JSON or PDF sources for easier management and scalability.
+- Add user authentication (JWT) to secure individual chat sessions.
+- Allow deleting history entries by ID for better user control.
+- Organize chat sessions by topic to make conversation history more structured.
+- Add search functionality in chat logs to quickly find previous answers.
+- Implement caching (e.g., Redis) to speed up repeated RAG queries.
 
