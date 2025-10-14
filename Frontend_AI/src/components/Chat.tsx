@@ -64,7 +64,7 @@ const Chat = () => {
 
         {error && <p className="error">⚠️ {error}</p>}
       </div>
-      <footer className="chat-footer">© AI Developer Assistant 2025</footer>
+      <footer className="chat-footer">© AI Chat 2025</footer>
     </>
   );
 };
