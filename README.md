@@ -96,6 +96,7 @@ flowchart LR
     O2 --> B2
     B2 --> B3
     B3 -->|Relevant context| B4
+    B4 <--> O1
     B4 -->|Response| B5
     B5 --> D2
     B5 --> A3
