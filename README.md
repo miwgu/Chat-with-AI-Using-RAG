@@ -10,7 +10,7 @@ By leveraging **Retrieval-Augmented Generation (RAG)**, it retrieves context fro
 - **Minimal, ChatGPT-like UI** — simple and intuitive chat interface  
 - **Chat history display** — messages are shown from oldest to newest  
 - **Seamless backend integration** — communicates via `/api/query` and `/api/getchatlog`  
-- **LLM powered by Mistral (via Ollama)**  
+- **LLM powered by llama3:8b (via Ollama)**  
 - **RAG pipeline implemented with LangChain** — retrieves relevant information from a PostgreSQL + pgvector knowledge base before generating responses  
 - **Custom knowledge base support** — easily store and search your own documents or internal data for context-aware answers  
 
@@ -21,7 +21,7 @@ By leveraging **Retrieval-Augmented Generation (RAG)**, it retrieves context fro
 
 - **Frontend:** React (TypeScript + Vite) 
 - **Backend:** Express.js (TypeScript)
-- **LLM Integration:** LangChain + Mistral (via [Ollama](https://ollama.com/))
+- **LLM Integration:** LangChain + llama3:8b (via [Ollama](https://ollama.com/))
 - **RAG:** Generate and store embeddings with `nomic-embed-text`, retrieve relevant documents using pgvector, and build context prompts for the LLM
 - **Database:** PostgreSQL (pgvector)
 - **Containerization:** Docker, Docker Compose
@@ -35,13 +35,13 @@ By leveraging **Retrieval-Augmented Generation (RAG)**, it retrieves context fro
 3. The backend processes the request using **LangChain**:  
    - The question is **embedded** using the embedding model (`nomic-embed-text` via Ollama).  
    - A **vector similarity search** is performed in PostgreSQL (pgvector) to find the most relevant context.  
-   - The retrieved context is **combined** with the user’s query and sent to the **LLM (Mistral via Ollama)** for response generation.  
+   - The retrieved context is **combined** with the user’s query and sent to the **LLM (llama3:8b via Ollama)** for response generation.  
 4. The generated response is returned to the frontend **and saved in the database** for chat history tracking.  
 5. A GET request to **`/api/getchatlog`** retrieves all previous chat logs for display in the UI.
 
 ### Under the Hood
 - **RAG (Retrieval-Augmented Generation)** implemented with **LangChain**  
-- **LLM-powered responses** using **Mistral** via **Ollama** (runs locally, no external APIs required)  
+- **LLM-powered responses** using **llama3:8b** via **Ollama** (runs locally, no external APIs required)  
 - **PostgreSQL + pgvector** for document embeddings and similarity search  
 - **Persistent chat history** with unique IDs and timestamps  
 - **Frontend rendering** displays messages chronologically (oldest → newest)
@@ -52,22 +52,22 @@ By leveraging **Retrieval-Augmented Generation (RAG)**, it retrieves context fro
 flowchart LR
     %% User
     subgraph User
-        A1[Type question in chat UI]
+        A1[User<br>types question]
     end
 
     %% Frontend
     subgraph Frontend
-        A2[Frontend React Vite]
-        A3[Render chat UI and history]
+        A2[React + Vite<br>Chat UI]
+        A3[Display response<br>and history]
     end
 
     %% Backend
     subgraph Backend
-        B1[Receive query]
-        B2[Embed query via nomic-embed-text Ollama]
-        B3[Vector search & retrieve relevant context from PostgreSQL pgvector]
-        B4[Generate response via Mistral Ollama]
-        B5[Store question and response in DB]
+        B1[Receive query (API)]
+        B2[Embed query<br>via nomic-embed-text]
+        B3[Context retrieval<br>from pgvector]
+        B4[Generate response<br>via llama3:8b (Ollama)]
+        B5[Store chat logs<br>in DB]
     end
 
     %% Database
@@ -76,23 +76,34 @@ flowchart LR
         D2[(Chat Logs Table)]
     end
 
-    %% Ollama
+    %% Ollama Models
     subgraph Ollama
-        O1[(Mistral LLM)]
+        O1[(llama3:8b)]
         O2[(nomic-embed-text)]
     end
 
-    %% Connections
+    %% Docker initialization
+    subgraph Docker_Init
+        X1[Run init.sql<br>to setup tables]
+        X2[registerKnowledge.ts<br>to embed and store knowledge]
+    end
+
+    %% Flow connections
     A1 --> A2
     A2 -->|POST /api/query| B1
     B1 -->|Embedding Request| O2
     O2 --> B2
     B2 --> B3
-    B3 -->|Context for response| B4
+    B3 -->|Relevant context| B4
     B4 -->|Response| B5
     B5 --> D2
     B5 --> A3
     A3 --> A1
+
+    %% Init connections
+    X1 --> D1
+    X2 --> D1
+
 ```
 
 
@@ -142,10 +153,11 @@ DB_NAME=chatdb
 ```
 -for Frontend
 ```bash
-#local
-#VITE_BACKEND_URL=http://localhost:3000
-#Docker
 VITE_BACKEND_URL=http://localhost:3001
+```
+-for Backend
+```bash
+FRONTEND_ORIGIN=http://localhost:4173
 ```
 
 
@@ -163,9 +175,9 @@ The backend container connects to Ollama running on your host machine via `http:
 curl -fsSL https://ollama.com/install.sh | sh
 ```
 
-2. Download LLM Model (e.g., Mistral)
+2. Download LLM Model (e.g., llama3:8b)
 ```bash
-ollama run mistral
+ollama run llama3:8b
 ```
 
 3. Download Embed Model (e.g., nomic-embed-text)
