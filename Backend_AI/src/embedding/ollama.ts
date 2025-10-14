@@ -6,9 +6,9 @@ export class OllamaEmbedder implements EmbeddingProvider {
 
   constructor() {
     this.model = new OllamaEmbeddings({
-        model: process.env.OLLAMA_EMBED_MODEL || "nomic-embed-text",
+        model: process.env.OLLAMA_EMBED_MODEL ||"nomic-embed-text",
         baseUrl: process.env.OLLAMA_URL ||"http://host.docker.internal:11434",
-    })
+    });
   }
 
  async embedText(text: string): Promise< number[]> {
@@ -18,7 +18,5 @@ export class OllamaEmbedder implements EmbeddingProvider {
         return result[0] as number [];
     }
     return result as number[];
-
  }
-
 }
