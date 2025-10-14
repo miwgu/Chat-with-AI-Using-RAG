@@ -50,24 +50,25 @@ By leveraging **Retrieval-Augmented Generation (RAG)**, it retrieves context fro
 ## 🧠 System Architecture Diagram
 ```mermaid
 flowchart LR
+
     %% User
     subgraph User
-        A1[User\ntypes question]
+        A1[User types question]
     end
 
     %% Frontend
     subgraph Frontend
-        A2[React + Vite\nChat UI]
-        A3[Display response\nand history]
+        A2[React + Vite Chat UI]
+        A3[Display response and history]
     end
 
     %% Backend
     subgraph Backend
         B1[Receive query (API)]
-        B2[Embed query\nvia nomic-embed-text]
-        B3[Context retrieval\nfrom pgvector]
-        B4[Generate response\nvia llama3:8b (Ollama)]
-        B5[Store chat logs\nin DB]
+        B2[Embed query via nomic-embed-text]
+        B3[Context retrieval from pgvector]
+        B4[Generate response via llama3:8b (Ollama)]
+        B5[Store chat logs in DB]
     end
 
     %% Database
@@ -84,8 +85,8 @@ flowchart LR
 
     %% Docker initialization
     subgraph Docker_Init
-        X1[Run init.sql\nto setup tables]
-        X2[registerKnowledge.ts\nto embed and store knowledge]
+        X1[Run init.sql to setup tables]
+        X2[registerKnowledge.ts to embed and store knowledge]
     end
 
     %% Flow connections
@@ -103,6 +104,7 @@ flowchart LR
     %% Init connections
     X1 --> D1
     X2 --> D1
+
 
 ```
 
