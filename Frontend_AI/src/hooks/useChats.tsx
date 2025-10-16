@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ChatEntry, fetchChatLog, postQuery } from "../api/chatApi";
+import { ChatEntry, fetchChatLog, streamQuery } from "../api/chatApi";
 
 export const useChat = () => {
   const [message, setMessage] = useState("");
@@ -41,36 +41,34 @@ export const useChat = () => {
      Immediate on-screen display using a temporary ID and temporary creation time
      so that the user can see their question while the response is being generated
     */
+   const tempId = Date.now();
     const tempEntry: ChatEntry = {
-      id: Date.now(),
+      id: tempId,
       question: userMessage,
       response: "",
       created_at: new Date().toISOString(),
     };
     setChatLog((prev) => [...prev, tempEntry]);
-    const index = chatLog.length;
+    
+    /**
+     * streamQuery
+     * prev=[
+     * {id:1, question: "Hello", response: "Hi!"},   // entry 1
+     * {id:1749940215123, question: "What is your name?", response: ""}]//emtry 2 send question now
+     * Set newest setChatLog((prev) => [...prev, tempEntry]);
+     */
 
     try {
-      const stream = await postQuery(userMessage);
-      const reader = stream.getReader();
-      const decoder = new TextDecoder();
-      let done = false;
-      let fullReply = "";
-
-      while (!done) {
-        const { value, done: doneReading } = await reader.read();
-        done = doneReading;
-        if (value) {
-          const chunk = decoder.decode(value, { stream: true });
-          fullReply += chunk;
-
-          setChatLog((prev) => {
-            const updated = [...prev];
-            updated[index] = { ...updated[index], response: fullReply };
-            return updated;
-          });
-        }
-      }
+        await streamQuery(userMessage, (chunk)=>{
+        setChatLog((prev) => { //prev already includes the newest question in the chat log
+          return prev.map((entry)=>
+            entry.id === tempId //Date.now()
+          // Copy the previous entry and update only the response with the new chunk
+          ? { ...entry, response: (entry.response || "") +chunk}
+          : entry
+          );
+        });   
+      }); 
     } catch (err: any) {
       setError(err.message || "An error occurred");
     } finally {

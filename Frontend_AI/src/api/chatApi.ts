@@ -23,3 +23,22 @@ export const postQuery = async (message: string): Promise<ReadableStream<Uint8Ar
   if (!res.body) throw new Error("No response stream");
   return res.body;
 };
+
+export const streamQuery = async (
+  message: string,
+  onChunk: (chunk: string) => void
+) => {
+   const stream = await postQuery(message);
+   const reader = stream.getReader();
+   const decoder = new TextDecoder();
+   let done = false;
+
+   while(!done) {
+    const { value, done:doneReading} = await reader.read();
+    done = doneReading;
+    if(value) {
+      const chunk = decoder.decode(value, {stream: true});
+      onChunk(chunk); //pass this value to the hook
+    }
+   }
+}
