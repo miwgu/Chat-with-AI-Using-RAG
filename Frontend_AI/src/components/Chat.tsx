@@ -1,66 +1,30 @@
 import { useChat } from "../hooks/useChats";
 import "./Chat.css";
+import ChatInput from "./ChatInput";
 import ChatMessages from "./ChatMessages";
 
 
 const Chat = () => {
-  const {
-    message,
-    setMessage,
-    loading,
-    error,
-    sendMessage,
-  } = useChat();
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    sendMessage();
-  };
+  const chat = useChat();
   
   return (
     <>
       <div className="background-image-layer"></div>
       <div className="chat-container">
-        <ChatMessages />
-         {/* <div className="chat-messages">
-          {chatLog.length === 0 ? (
-            <div className="empty-message">
-              There is no chat history. Please enter a question.
-            </div>
-          ) : (
-            chatLog.map((entry, idx) => {
-              return (
-                <div key={entry.id}>
-                  <div className="message user">{entry.question}</div>
-                  <div className="message ai">
-                    {isLoadingEntry(idx, entry) ? <TypingAnimation /> : entry.response}
-                  </div>
-                </div>
-              );
-            })
-          )}
-          <div ref={chatEndRef} /> 
-        </div> */}
+        <ChatMessages
+         chatLog={chat.chatLog}
+         loading={chat.loading}
+         chatEndRef ={chat.chatEndRef}
+         />
 
-        <form className="chat-input" onSubmit={handleSubmit}>
-          <textarea
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Type your message..."
-            disabled={loading}
-            rows={1}
-          />
+        <ChatInput
+         message={chat.message}
+         setMessage={chat.setMessage}
+         loading={chat.loading}
+         sendMessage={chat.sendMessage}
+        />
 
-          <button
-            type="submit"
-            disabled={loading || !message.trim()}
-            /* className={loading || !message.trim() ? "disabled" : ""} */
-          >
-            Send
-          </button>
-        </form>
-
-        {error && <p className="error">⚠️ {error}</p>}
+        {chat.error && <p className="error">⚠️ {chat.error}</p>}
       </div>
       <footer className="chat-footer">© AI Chat 2025</footer>
     </>

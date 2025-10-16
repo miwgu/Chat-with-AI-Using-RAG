@@ -1,15 +1,15 @@
-import { useChat } from "../hooks/useChats";
 import { ChatEntry } from "../api/chatApi";
 import TypingAnimation from "./TypingAnimation";
 import "./Chat.css";
+import React from "react";
 
-const ChatMessages = () => {
-      const {
-        chatLog,
-        loading,
-        chatEndRef,
-      } = useChat();
-    
+interface Props {
+  chatLog: ChatEntry[];
+  loading: boolean,
+  chatEndRef: React.RefObject<HTMLDivElement>
+}
+const ChatMessages: React.FC<Props>  = ({ chatLog, loading, chatEndRef }) => {
+
  /**
    * Check if this entry should show typing animation
    * @param idx - The index of the entry in the chat log
