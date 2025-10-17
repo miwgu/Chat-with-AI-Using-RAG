@@ -1,12 +1,12 @@
-import './App.css'
-import Chat from './components/Chat'
+import Chat from './components/Chat';
+
 
 function App() {
 
   return (
-    <>     
-      <Chat/>
-    </>
+    <div className="max-w-[1280px] mx-auto p-8 text-center">  
+      <Chat />
+    </div>
   )
 }
 

@@ -1,5 +1,4 @@
 import { useChat } from "../hooks/useChats";
-import "./Chat.css";
 import ChatInput from "./ChatInput";
 import ChatMessages from "./ChatMessages";
 
@@ -9,8 +8,8 @@ const Chat = () => {
   
   return (
     <>
-      <div className="background-image-layer"></div>
-      <div className="chat-container">
+      <div className="fixed inset-0 bg-[url('/images/flower-1469664.jpg')] bg-cover bg-center opacity-50 -z-10 pointer-events-none"></div>
+      <div className="max-w-3xl mx-auto h-[75vh] flex flex-col border border-gray-300 rounded-xl p-4 bg-white shadow-md">
         <ChatMessages
          chatLog={chat.chatLog}
          loading={chat.loading}
@@ -24,9 +23,9 @@ const Chat = () => {
          sendMessage={chat.sendMessage}
         />
 
-        {chat.error && <p className="error">⚠️ {chat.error}</p>}
+        {chat.error && <p className="text-red-500 text-sm mt-2">⚠️ {chat.error}</p>}
       </div>
-      <footer className="chat-footer">© AI Chat 2025</footer>
+      <footer className="inline-block text-xs text-white bg-black/40 backdrop-blur-md rounded-xl mt-4 py-2 px-6 shadow">© AI Chat 2025</footer>
     </>
   );
 };

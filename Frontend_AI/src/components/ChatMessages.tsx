@@ -1,6 +1,5 @@
 import { ChatEntry } from "../api/chatApi";
 import TypingAnimation from "./TypingAnimation";
-import "./Chat.css";
 import React from "react";
 
 interface Props {
@@ -25,17 +24,19 @@ const ChatMessages: React.FC<Props>  = ({ chatLog, loading, chatEndRef }) => {
 
 
   return (
-    <div className="chat-messages">
+    <div className="flex-1 p-4 overflow-y-auto bg-gray-50 rounded-md">
           {chatLog.length === 0 ? (
-            <div className="empty-message">
+            <div className="text-center text-gray-400 italic mt-10">
               There is no chat history. Please enter a question.
             </div>
           ) : (
             chatLog.map((entry, idx) => {
               return (
                 <div key={entry.id}>
-                  <div className="message user">{entry.question}</div>
-                  <div className="message ai">
+                  <div className="break-words whitespace-pre-wrap bg-indigo-100 text-gray-800 p-3 rounded-lg my-2 ml-auto max-w-[60%] text-left">
+                    {entry.question}
+                  </div>
+                  <div className="break-words whitespace-pre-wrap bg-gray-100 text-gray-800 p-3 rounded-lg my-2 mr-auto max-w-[90%] text-left">
                     {isLoadingEntry(idx, entry) ? <TypingAnimation /> : entry.response}
                   </div>
                 </div>
