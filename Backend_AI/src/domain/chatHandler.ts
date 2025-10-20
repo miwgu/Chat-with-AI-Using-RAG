@@ -13,23 +13,24 @@ export async function handleChatQuery(message: string): Promise<AsyncGenerator<s
    Return ONLY the category name.
    Question: "${message}"
   `;
-  const category = (await ollama.invoke(classifyPrompt)).trim();
+  const category = (await ollama.invoke(classifyPrompt)).trim().toLowerCase();
   const normalizedCategory = category?.trim().toLowerCase() || "general";//if LLM cannot generate category show general
   console.log("🌟 Detected category:", normalizedCategory);
 
-  //2 Category-restricted RAG search
+  //2 All search(Top5)
   const docs = await searchKnowledge(message, 5);
-  const adjustedDocs = docs.map(d => ({
-    ...d,
-    score: d.category === normalizedCategory ? d.similarity * 1.2 : d.similarity
-  })
- );
-  adjustedDocs.sort((a, b) => b.score - a.score);
-  
-  const topDocs = adjustedDocs.slice(0, 3);
-  console.log("📚 Top3_Retrieved documents:",topDocs.map(d=>({content: d.content, similarity: d.similarity, distance: d.distance})));
+  const sameCategoryDocs = docs.filter(
+   d => d.category=== normalizedCategory
+  );
 
-  //console.log("📚 Retrieved documents:", docs.map(d => ({ content: d.content, distance: d.distance })));
+  //3 Top3 category matches 
+  const topDocs = [
+    ... sameCategoryDocs.slice(0,3), //include the top three category matches
+    ...docs
+    .filter(d => !sameCategoryDocs.includes(d))//Exclude those already selected
+    .slice(0, 3 - sameCategoryDocs.length) // If there are fewer than three, add the remainder.
+  ]
+  console.log("📚 Top3_Retrieved documents:",topDocs.map(d=>({content: d.content, similarity: d.similarity, distance: d.distance})));
   const context = topDocs.length ? topDocs.map(d => d.content).join("\n") : "No relevant context found.";
   console.log("✅ Context passed to LLM:", context);
 

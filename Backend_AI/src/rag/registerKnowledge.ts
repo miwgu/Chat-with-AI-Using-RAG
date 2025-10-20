@@ -81,9 +81,10 @@ async function registerKnowledge(){
                 continue;
             }
 
+            const vectorSql = toSql(embedding).replace(/\s+/g,''); 
             await db.query(
                 `INSERT INTO documents (content, category, tags, embedding) VALUES ($1, $2, $3, $4)`,
-                [doc.content, doc.category.trim().toLowerCase(), doc.tags, toSql(embedding)]
+                [doc.content, doc.category.trim().toLowerCase(), doc.tags, vectorSql]
             );
 
             console.log(`✅ Inserted: ${doc.content.slice(0, 40)}...`);
