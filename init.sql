@@ -3,6 +3,8 @@ CREATE EXTENSION IF NOT EXISTS vector;
 CREATE TABLE documents (
   id SERIAL PRIMARY KEY,
   content TEXT NOT NULL,
+  category TEXT,
+  tags TEXT[],
   embedding VECTOR(768)  -- Match embedding dimension
 );
 
