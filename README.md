@@ -1,4 +1,4 @@
-# Full-stack AI Chatbot with RAG - Docker + Ollama + pgvector
+# Full-stack AI Chatbot with RAG - Docker + Ollama(Linux/WSL2)+ pgvector
 
 ## 📚 Overview
 
