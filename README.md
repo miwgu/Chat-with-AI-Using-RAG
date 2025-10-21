@@ -238,14 +238,14 @@ docker compose down -v
 ```
 >This will remove both the container and the persistent volume, so the database is recreated from scratch
 
-→ Rebuilds the image from the Dockerfile.
-→ All latest code and dependency changes are applied.
+- Rebuilds the image from the Dockerfile.
+- All latest code and dependency changes are applied.
 ```bash
 docker compose up -d --build
 ```
 OR
-→ Reuses the existing image.
-→ Code changes are not reflected in the container.
+- Reuses the existing image.
+- Code changes are not reflected in the container.
 ```bash
 docker compose up -d
 ```
